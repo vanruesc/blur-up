@@ -86,7 +86,7 @@ Note: The generated SVG file will be minified.
 The command line options `--input` and `--output` overwrite the respective fields in the configuration.
 
 If only `width` or `height` is specified, the counter part will be calculated automatically to
-preserve the original aspect ratio. If none of these two are specified, `width` will be set to 40
+preserve the original aspect ratio. If both of these fields are undefined, `width` will be set to 40
 and `height` will be adjusted accordingly.
 
 #### .blur-up.json
