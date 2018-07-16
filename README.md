@@ -12,7 +12,7 @@ to load.
 | Preview SVG | Original Image |
 |-------------|----------------|
 | 1.33Kb      | 402Kb          |
-| | |
+| <img src="https://vanruesc.github.io/blur-up/test/expected/img.svg" width="250"> | <img src="https://vanruesc.github.io/blur-up/test/images/img.jpg" width="250"> |
 
 
 ## Installation
