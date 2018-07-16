@@ -32,7 +32,9 @@ The command line tool can be invoked using the `blur-up` command:
 blur-up -i images/* -o previews -c configs/blur-up.json
 ```
 
-Please refer to the [Options](#options) section for more information on how to setup a configuration.
+You may provide a configuration via `package.json` or as a standalone file. If there is no configuration
+in `package.json`, the tool will look for a configuration file with the default name `.blur-up.json` in
+the current working directory. Please refer to the [Options](#options) section for more information.
 
 | Option         | Shorthand | Description                                |
 |----------------|-----------|--------------------------------------------|
@@ -72,10 +74,6 @@ Note: The generated SVG file will be minified.
 
 ## Options
 
-You may provide a configuration via `package.json` or as a standalone file. If there is no configuration
-in `package.json`, the tool will look for a configuration file with the default name `.blur-up.json` in
-the current working directory.
-
 | Option        | Default  | Description                                |
 |---------------|----------|--------------------------------------------|
 | input         | -        | Can be a single path or an array of paths  |
@@ -87,9 +85,9 @@ the current working directory.
 
 The command line options `--input` and `--output` overwrite the respective fields in the configuration.
 
-If only a `width` or a `height` is specified, the counter part will be calculated automatically to
-preserve the original aspect ratio. If neither a `width` nor a `height` is specified, the `width` will
-be set to 40 and the `height` will be adjusted accordingly.
+If only `width` or `height` is specified, the counter part will be calculated automatically to
+preserve the original aspect ratio. If none of these two are specified, `width` will be set to 40
+and `height` will be adjusted accordingly.
 
 #### .blur-up.json
 
