@@ -1,0 +1,92 @@
+{
+	"name": "blur-up",
+	"version": "1.0.0",
+	"description": "A tool that embeds images in SVG files to apply a blur filter.",
+	"homepage": "https://github.com/vanruesc/blur-up",
+	"main": "build/blur-up.js",
+	"module": "src/index.js",
+	"bin": {
+		"blur-up": "./bin/cli.js"
+	},
+	"sideEffects": false,
+	"license": "Zlib",
+
+	"keywords": [
+		"lazy",
+		"preview",
+		"image",
+		"embed",
+		"svg",
+		"base64",
+		"data",
+		"uri"
+	],
+
+	"author": {
+		"name": "Raoul van Rüschen",
+		"email": "vanruesc@outlook.de"
+	},
+
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/vanruesc/blur-up.git"
+	},
+
+	"bugs": {
+		"url": "https://github.com/vanruesc/blur-up/issues"
+	},
+
+	"files": [
+		"src",
+		"build",
+		"bin"
+	],
+
+	"scripts": {
+		"lint": "npm run lint:lib && npm run lint:test",
+		"lint:config": "eslint *.js",
+		"lint:lib": "eslint src",
+		"lint:test": "eslint test",
+		"build": "rollup -c",
+		"build:production": "cross-env NODE_ENV=production npm run build",
+		"pretest": "npm run lint && npm run build:production",
+		"test": "ava",
+		"prepack": "npm run pretest && concat -o bin/cli.js shebang.txt bin/cli.js"
+	},
+
+	"engines": {
+		"node": ">=4.0.0",
+		"npm": ">=4.0.0"
+	},
+
+	"ava": {
+		"failFast": true,
+		"files": ["test/test.js"]
+	},
+
+	"eslintConfig": {
+		"extends": "delta"
+	},
+
+	"dependencies": {
+		"fs-extra": "6.x.x",
+		"glob": "7.x.x",
+		"sharp": "0.x.x",
+		"yargs-parser": "10.x.x"
+	},
+
+	"devDependencies": {
+		"ava": "0.x.x",
+		"babel-core": "6.x.x",
+		"babel-plugin-external-helpers": "6.x.x",
+		"babel-preset-env": "1.x.x",
+		"concat": "1.x.x",
+		"cross-env": "5.x.x",
+		"eslint": "5.x.x",
+		"eslint-config-delta": "0.x.x",
+		"rollup": "0.x.x",
+		"rollup-plugin-babel": "3.x.x",
+		"rollup-plugin-babel-minify": "5.x.x",
+		"rollup-plugin-node-resolve": "3.x.x"
+	}
+}
