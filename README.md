@@ -9,9 +9,9 @@ file scales the integrated image up to its original dimensions and applies a blu
 preview of the original image. Such preview SVGs can be used as temporary substitutes for images that take longer
 to load.
 
-| Preview SVG | Original Image |
-|-------------|----------------|
-| 1.33Kb      | 402Kb          |
+| Preview SVG | Original Image   |
+|-------------|------------------|
+| 1062 Bytes  | 402.15 Kilobytes |
 | <img src="https://vanruesc.github.io/blur-up/test/expected/img.svg" width="250"> | <img src="https://vanruesc.github.io/blur-up/test/images/img.jpg" width="250"> |
 
 
@@ -26,11 +26,13 @@ npm install blur-up
 
 ### Command Line Interface (CLI)
 
-The command line tool can be invoked using the `blur-up` command.
+The command line tool can be invoked using the `blur-up` command:
 
-Additional [options](#options) may be specified via `package.json` or as a standalone configuration file.
-If there is no configuration in `package.json`, the tool will look for a configuration file with the default
-name `.blur-up.json` in the current working directory.
+```sh
+blur-up -i images/* -o previews -c configs/blur-up.json
+```
+
+Please refer to the [Options](#options) section for more information on how to setup a configuration.
 
 | Option         | Shorthand | Description                                |
 |----------------|-----------|--------------------------------------------|
@@ -38,14 +40,10 @@ name `.blur-up.json` in the current working directory.
 | --input        | -i        | Specifies the input path or glob pattern   |
 | --output       | -o        | Specifies the output directory             |
 
-#### Example
-
-```sh
-blur-up -i images/* -o previews -c configs/blur-up.json
-```
-
 
 ### JavaScript API
+
+The `generate` function returns a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises).
 
 ```javascript
 import BlurUp from "blur-up";
@@ -56,26 +54,29 @@ BlurUp.generate("images/bg.jpg", "output/dir", options).catch(console.error);
 
 ### Output
 
+Each individual image will be wrapped in an SVG construct of the following form:
+
 ```xml
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
 	width="IMG_WIDTH" height="IMG_HEIGHT" viewBox="0 0 IMG_WIDTH IMG_HEIGHT">
 	<filter id="blur" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
 		<feGaussianBlur stdDeviation="STD_DEVIATION_X STD_DEVIATION_Y" edgeMode="duplicate" />
-		<feComponentTransfer>
-			<feFuncA type="discrete" tableValues="1 1" />
-		</feComponentTransfer>
+		<feComponentTransfer><feFuncA type="discrete" tableValues="1 1" /></feComponentTransfer>
 	</filter>
 	<image filter="url(#blur)" x="0" y="0" height="100%" width="100%" xlink:href="IMG_DATA_URI" />
 </svg>
 ```
 
-Note: The generated SVG file will always be minified.
-
+Note: The generated SVG file will be minified.
 
 
 ## Options
 
-| Field         | Default | Description                                |
+You may provide a configuration via `package.json` or as a standalone file. If there is no configuration
+in `package.json`, the tool will look for a configuration file with the default name `.blur-up.json` in
+the current working directory.
+
+| Option        | Default  | Description                                |
 |---------------|----------|--------------------------------------------|
 | input         | -        | Can be a single path or an array of paths  |
 | output        | -        | Must be a path that describes a directory  |
@@ -84,9 +85,9 @@ Note: The generated SVG file will always be minified.
 | width         | auto, 40 | The width of the preview image             |
 | height        | auto     | The height of the preview image            |
 
-The command line options `--input` and `--output` overwrite the respective fields in the config.
+The command line options `--input` and `--output` overwrite the respective fields in the configuration.
 
-If only the `width` or the `height` is specified, the counter part will be adjusted automatically to
+If only a `width` or a `height` is specified, the counter part will be calculated automatically to
 preserve the original aspect ratio. If neither a `width` nor a `height` is specified, the `width` will
 be set to 40 and the `height` will be adjusted accordingly.
 
@@ -108,7 +109,7 @@ be set to 40 and the `height` will be adjusted accordingly.
 ```javascript
 {
 	"blurUp": {
-	    "input": ["path/to/img/*.jpg", "other/path/*.png"],
+		"input": ["path/to/img/*.jpg", "other/path/*.png"],
 		"output": "output/dir"
 	}
 }
