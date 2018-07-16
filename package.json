@@ -1,7 +1,7 @@
 {
 	"name": "blur-up",
 	"version": "1.0.0",
-	"description": "A tool that embeds images in SVG files to apply a blur filter.",
+	"description": "A tool that generates image previews.",
 	"homepage": "https://github.com/vanruesc/blur-up",
 	"main": "build/blur-up.js",
 	"module": "src/index.js",
