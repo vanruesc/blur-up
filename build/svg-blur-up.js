@@ -1,5 +1,5 @@
 /**
- * blur-up v1.0.0 build Mon Jul 16 2018
+ * svg-blur-up v1.0.2 build Mon Jul 16 2018
  * https://github.com/vanruesc/blur-up
  * Copyright 2018 Raoul van Rüschen, Zlib
  */

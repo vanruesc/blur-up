@@ -1,9 +1,9 @@
 {
-	"name": "blur-up",
-	"version": "1.0.0",
+	"name": "svg-blur-up",
+	"version": "1.0.2",
 	"description": "A tool that generates image previews.",
 	"homepage": "https://github.com/vanruesc/blur-up",
-	"main": "build/blur-up.js",
+	"main": "build/svg-blur-up.js",
 	"module": "src/index.js",
 	"bin": {
 		"blur-up": "./bin/cli.js"
@@ -51,7 +51,7 @@
 		"build:production": "cross-env NODE_ENV=production npm run build",
 		"pretest": "npm run lint && npm run build:production",
 		"test": "ava",
-		"prepack": "npm run pretest && concat -o bin/cli.js shebang.txt bin/cli.js"
+		"prepack": "npm test && concat -o bin/cli.js shebang.txt bin/cli.js"
 	},
 
 	"engines": {

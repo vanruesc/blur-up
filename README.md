@@ -1,7 +1,7 @@
 # Blur Up
 
 [![Build status](https://travis-ci.org/vanruesc/blur-up.svg?branch=master)](https://travis-ci.org/vanruesc/blur-up)
-[![npm version](https://badge.fury.io/js/blur-up.svg)](https://badge.fury.io/js/blur-up)
+[![npm version](https://badge.fury.io/js/svg-blur-up.svg)](https://badge.fury.io/js/svg-blur-up)
 [![Dependencies](https://david-dm.org/vanruesc/blur-up.svg?branch=master)](https://david-dm.org/vanruesc/blur-up)
 
 A tool that creates a small, optimized version of an input image and embeds it in an SVG file. The generated SVG
@@ -18,7 +18,7 @@ to load.
 ## Installation
 
 ```sh
-npm install blur-up
+npm install svg-blur-up
 ``` 
 
 

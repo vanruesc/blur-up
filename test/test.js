@@ -1,6 +1,6 @@
 import fs from "fs-extra";
 import test from "ava";
-import BlurUp from "../build/blur-up.js";
+import BlurUp from "../build/svg-blur-up.js";
 
 const options = {
 	width: 20,
