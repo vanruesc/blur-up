@@ -97,13 +97,13 @@ function getFiles(config) {
 }
 
 /**
- * Verifies a given configuration.
+ * Validates a given configuration.
  *
  * @param {Object} A configuration.
  * @return {Promise<Object>} A promise that returns the given configuration.
  */
 
-function verifyConfig(config) {
+function validateConfig(config) {
 
 	return new Promise((resolve, reject) => {
 
@@ -223,7 +223,7 @@ function readConfig() {
 
 // Program entry point.
 readConfig()
-	.then(verifyConfig)
+	.then(validateConfig)
 	.then(getFiles)
 	.then(result => generate(...result))
 	.then(console.log)
