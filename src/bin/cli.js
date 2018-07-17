@@ -13,7 +13,7 @@ import { BlurUp } from "../core/BlurUp.js";
 
 const argv = Object.assign({
 
-	config: ".blur-up.json",
+	config: null,
 	input: null,
 	output: null
 
@@ -122,11 +122,11 @@ function getFiles(config) {
 /**
  * Validates a given configuration.
  *
- * @param {Object} A configuration.
+ * @param {Object} [config] - A configuration.
  * @return {Promise<Object>} A promise that returns the given configuration.
  */
 
-function validateConfig(config) {
+function validateConfig(config = {}) {
 
 	return new Promise((resolve, reject) => {
 
@@ -178,67 +178,80 @@ function validateConfig(config) {
 
 function readConfig() {
 
-	return new Promise((resolve, reject) => {
+	// Checks if the package file contains a configuration.
+	const pkgConfigPromise = new Promise((resolve, reject) => {
 
-		// Check if the package file contains a configuration.
-		fs.readFile(path.join(process.cwd(), "package.json"), (error, data) => {
+		fs.readFile(path.join(process.cwd(), "package.json")).then((data) => {
 
-			let config;
+			try {
 
-			if(error === null) {
+				resolve(JSON.parse(data).blurUp);
 
-				try {
+			} catch(error) {
 
-					config = JSON.parse(data).blurUp;
+				reject(error);
 
-				} catch(error) {
+			}
 
-					reject(error);
+		}).catch((error) => {
+
+			// There's no configuration in package.json.
+			resolve();
+
+		});
+
+	});
+
+	// Looks for a configuration file.
+	const configFilePromise = new Promise((resolve, reject) => {
+
+		// Check if the user specified an alternative configuration path.
+		const configPath = path.join(process.cwd(), (argv.config === null) ? ".blur-up.json" : argv.config);
+
+		fs.readFile(configPath).then((data) => {
+
+			try {
+
+				resolve(JSON.parse(data));
+
+			} catch(error) {
+
+				reject(error);
+
+			}
+
+		}).catch((error) => {
+
+			if(argv.config === null) {
+
+				// There's no configuration at the default location.
+				resolve();
+
+			} else {
+
+				if(error.code === "ENOENT") {
+
+					reject("Could not find the configuration file (" + configPath + ")");
+
+				} else {
+
+					reject("Failed to read the configuration file (" + error.code + ")");
 
 				}
 
 			}
 
-			if(config !== undefined) {
-
-				resolve(config);
-
-			} else {
-
-				// Look for a configuration file.
-				fs.readFile(path.join(process.cwd(), argv.config), (error, data) => {
-
-					if(error !== null) {
-
-						if(error.code === "ENOENT") {
-
-							reject("No configuration found");
-
-						} else {
-
-							reject("Failed to read the configuration file (" + error.code + ")");
-
-						}
-
-					} else {
-
-						try {
-
-							resolve(JSON.parse(data));
-
-						} catch(error) {
-
-							reject(error);
-
-						}
-
-					}
-
-				});
-
-			}
-
 		});
+
+	});
+
+	return new Promise((resolve, reject) => {
+
+		pkgConfigPromise.then((config) => {
+
+			return (config !== undefined) ? Promise.resolve(config) : configFilePromise;
+
+		}).then(resolve).catch(reject);
 
 	});
 
