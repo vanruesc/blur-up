@@ -235,7 +235,7 @@ function readConfig() {
 
 				} else {
 
-					reject("Failed to read the configuration file (" + error.code + ")");
+					reject("Failed to read the configuration file (" + error + ")");
 
 				}
 
