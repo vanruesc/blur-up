@@ -1,6 +1,6 @@
 {
 	"name": "svg-blur-up",
-	"version": "1.0.2",
+	"version": "1.1.0",
 	"description": "A tool that generates image previews.",
 	"homepage": "https://github.com/vanruesc/blur-up",
 	"main": "build/svg-blur-up.js",
