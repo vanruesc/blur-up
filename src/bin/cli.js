@@ -39,17 +39,26 @@ function generate(config, files) {
 
 	return new Promise((resolve, reject) => {
 
-		let i = 0;
+		const l = files.length;
+		let i = 0, c = l;
 
-		(function proceed(result) {
+		(function proceed() {
 
-			if(i === files.length) {
+			if(i === l) {
 
-				resolve("Generated " + files.length + " SVG " + ((files.length === 1) ? "file" : "files"));
+				resolve("Generated " + c + " SVG " + ((c === 1) ? "file" : "files"));
 
 			} else {
 
-				BlurUp.generate(files[i++], config.output, config).then(proceed).catch(reject);
+				const file = files[i++];
+
+				BlurUp.generate(file, config.output, config).then(proceed).catch((error) => {
+
+					--c;
+					console.warn(error.message, "(" + file + ")");
+					proceed();
+
+				});
 
 			}
 
