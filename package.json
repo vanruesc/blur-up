@@ -54,11 +54,6 @@
 		"prepack": "npm test && concat -o bin/cli.js shebang.txt bin/cli.js"
 	},
 
-	"engines": {
-		"node": ">=4.0.0",
-		"npm": ">=4.0.0"
-	},
-
 	"ava": {
 		"failFast": true,
 		"files": ["test/test.js"]
