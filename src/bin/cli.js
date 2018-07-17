@@ -28,7 +28,7 @@ const argv = Object.assign({
 }));
 
 /**
- * Embeds the given files in SVG files.
+ * Generates the image previews.
  *
  * @param {Object} config - A configuration.
  * @param {String[]} files - The files.
