@@ -79,7 +79,7 @@ Note: The generated SVG file will be minified.
 | input         | -        | Can be a single path or an array of paths  |
 | output        | -        | Must be a path that describes a directory  |
 | stdDeviationX | 20       | The blur strength along the X-axis         |
-| stdDeviationX | 20       | The blur strength along the Y-axis         |
+| stdDeviationY | 20       | The blur strength along the Y-axis         |
 | width         | auto, 40 | The width of the preview image             |
 | height        | auto     | The height of the preview image            |
 
