@@ -69,7 +69,7 @@
 	},
 
 	"dependencies": {
-		"fs-extra": "6.x.x",
+		"fs-extra": "7.x.x",
 		"glob": "7.x.x",
 		"sharp": "0.x.x",
 		"yargs-parser": "10.x.x"
