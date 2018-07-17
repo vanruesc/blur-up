@@ -80,26 +80,40 @@ function getFiles(config) {
 	return new Promise((resolve, reject) => {
 
 		const input = config.input;
-
+		let files = [];
 		let i = 0;
 
-		(function proceed(error, files) {
+		(function proceed(error, moreFiles) {
 
-			if(error !== undefined && error !== null) {
+			if(error !== null) {
 
 				reject(error);
 
-			} else if(i === input.length) {
-
-				resolve([config, files]);
-
 			} else {
 
-				glob(input[i++], proceed);
+				files = files.concat(moreFiles);
+
+				if(i === input.length) {
+
+					if(files.length === 0) {
+
+						reject("No input files found");
+
+					} else {
+
+						resolve([config, files]);
+
+					}
+
+				} else {
+
+					glob(input[i++], proceed);
+
+				}
 
 			}
 
-		}());
+		}(null, []));
 
 	});
 
