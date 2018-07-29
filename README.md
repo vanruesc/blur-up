@@ -60,7 +60,7 @@ Each individual image will be wrapped in an SVG construct of the following form:
 
 ```xml
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-	width="IMG_WIDTH" height="IMG_HEIGHT" viewBox="0 0 IMG_WIDTH IMG_HEIGHT">
+	width="ORIGINAL_WIDTH" height="ORIGINAL_HEIGHT" viewBox="0 0 VIEW_WIDTH VIEW_HEIGHT" preserveAspectRatio="none">
 	<filter id="blur" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
 		<feGaussianBlur stdDeviation="STD_DEVIATION_X STD_DEVIATION_Y" edgeMode="duplicate" />
 		<feComponentTransfer><feFuncA type="discrete" tableValues="1 1" /></feComponentTransfer>

@@ -66,19 +66,9 @@ export class Settings {
 		this.height = height;
 
 		/**
-		 * The aspect ratio correction.
-		 *
-		 * This will be 0 if either the width or the height is undefined.
-		 *
-		 * @type {Number}
-		 */
-
-		this.aspect = (width !== undefined && height !== undefined) ? width / Math.max(height, 1) : 0.0;
-
-		/**
 		 * The format of the input image.
 		 *
-		 * @type {Number}
+		 * @type {String}
 		 */
 
 		this.format = null;

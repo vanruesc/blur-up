@@ -21,7 +21,7 @@ function resize(settings) {
 		settings.originalWidth = metadata.width;
 		settings.originalHeight = metadata.height;
 
-		return image.resize(settings.width, settings.height).toBuffer();
+		return image.resize(settings.width, settings.height).toBuffer({ resolveWithObject: true });
 
 	});
 
@@ -32,22 +32,30 @@ function resize(settings) {
  *
  * @private
  * @param {Buffer} data - The data to write.
+ * @param {Object} info - Additional buffer info.
  * @param {Settings} settings - The settings.
  * @return {Promise<Buffer>} A promise.
  */
 
-function embed(data, settings) {
+function embed(data, info, settings) {
 
 	const dataURI = "data:image/" + settings.format + ";base64," + data.toString("base64");
 
+	const s = (settings.width === undefined && settings.height !== undefined) ?
+		Math.round(settings.originalHeight / info.height) :
+		Math.round(settings.originalWidth / info.width);
+
+	const vw = s * info.width;
+	const vh = s * info.height;
+
 	const w = settings.originalWidth;
-	const h = (settings.aspect > 0) ? Math.round(settings.originalWidth / settings.aspect) : settings.originalHeight;
+	const h = settings.originalHeight;
 
 	const x = settings.stdDeviationX;
 	const y = settings.stdDeviationY;
 
 	return Buffer.from("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" " +
-		"width=\"" + w + "\" height=\"" + h + "\" viewBox=\"0 0 " + w + " " + h + "\">" +
+		"width=\"" + w + "\" height=\"" + h + "\" viewBox=\"0 0 " + vw + " " + vh + "\" preserveAspectRatio=\"none\">" +
 		"<filter id=\"blur\" filterUnits=\"userSpaceOnUse\" color-interpolation-filters=\"sRGB\">" +
 		"<feGaussianBlur stdDeviation=\"" + x + " " + y + "\" edgeMode=\"duplicate\"/>" +
 		"<feComponentTransfer><feFuncA type=\"discrete\" tableValues=\"1 1\" /></feComponentTransfer>" +
@@ -108,7 +116,7 @@ export class BlurUp {
 		);
 
 		return resize(settings)
-			.then(result => embed(result, settings))
+			.then(({ data, info }) => embed(data, info, settings))
 			.then(result => writeFile(result, settings));
 
 	}
