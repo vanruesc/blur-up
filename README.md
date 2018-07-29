@@ -11,7 +11,7 @@ to load.
 
 | Preview SVG | Original Image   |
 |-------------|------------------|
-| 1062 Bytes  | 402.15 Kilobytes |
+| 1089 Bytes  | 402.15 Kilobytes |
 | <img src="https://vanruesc.github.io/blur-up/test/expected/img.svg" width="250"> | <img src="https://vanruesc.github.io/blur-up/test/images/img.jpg" width="250"> |
 
 
