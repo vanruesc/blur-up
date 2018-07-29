@@ -2,8 +2,6 @@ import fs from "fs-extra";
 import test from "ava";
 import BlurUp from "../build/svg-blur-up.js";
 
-const EOL = /(?:\\r\\n|\\r|\\n)/g;
-
 test.before(t => {
 
 	return fs.remove("test/generated");
@@ -14,7 +12,7 @@ test("can generate an SVG", t => {
 
 	return BlurUp.generate("test/images/img.jpg", "test/generated/a.svg").then(() => {
 
-		const actual = fs.readFileSync("test/generated/a.svg", "utf8").replace(EOL, "");
+		const actual = fs.readFileSync("test/generated/a.svg", "utf8");
 		const expected = fs.readFileSync("test/expected/a.svg", "utf8");
 
 		t.is(actual, expected);
@@ -32,7 +30,7 @@ test("honors options", t => {
 
 	}).then(() => {
 
-		const actual = fs.readFileSync("test/generated/b.svg", "utf8").replace(EOL, "");
+		const actual = fs.readFileSync("test/generated/b.svg", "utf8");
 		const expected = fs.readFileSync("test/expected/b.svg", "utf8");
 
 		t.is(actual, expected);
