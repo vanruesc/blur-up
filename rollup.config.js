@@ -31,7 +31,6 @@ const lib = {
 	plugins: [resolve()].concat(process.env.NODE_ENV === "production" ?
 		[babel(), minify({
 			bannerNewLine: true,
-			sourceMap: false,
 			comments: false
 		})] : []
 	)
@@ -50,7 +49,6 @@ const bin = {
 
 	plugins: [resolve()].concat(process.env.NODE_ENV === "production" ?
 		[babel(), minify({
-			sourceMap: false,
 			comments: false
 		})] : []
 	)
