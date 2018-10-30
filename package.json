@@ -68,7 +68,7 @@
 		"fs-extra": "7.x.x",
 		"glob": "7.x.x",
 		"sharp": "0.x.x",
-		"yargs-parser": "10.x.x"
+		"yargs-parser": "11.x.x"
 	},
 
 	"devDependencies": {
