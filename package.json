@@ -5,6 +5,9 @@
 	"homepage": "https://github.com/vanruesc/blur-up",
 	"main": "build/svg-blur-up.js",
 	"module": "src/index.js",
+	"exports": {
+		".": "./src/index.js"
+	},
 	"bin": {
 		"blur-up": "./bin/cli.js"
 	},
@@ -50,28 +53,34 @@
 	},
 	"ava": {
 		"failFast": true,
-		"files": ["test/test.js"]
+		"files": [
+			"test/test.js"
+		],
+		"require": [
+			"esm"
+		]
 	},
 	"eslintConfig": {
 		"extends": "aether"
 	},
 	"dependencies": {
-		"fs-extra": "8.x.x",
+		"fs-extra": "9.x.x",
 		"glob": "7.x.x",
 		"sharp": "0.x.x",
-		"yargs-parser": "16.x.x"
+		"yargs-parser": "19.x.x"
 	},
 	"devDependencies": {
 		"@babel/core": "7.x.x",
 		"@babel/preset-env": "7.x.x",
-		"@rollup/plugin-node-resolve": "6.x.x",
-		"ava": "2.x.x",
+		"@rollup/plugin-babel": "5.x.x",
+		"@rollup/plugin-node-resolve": "9.x.x",
+		"ava": "3.x.x",
 		"concat": "1.x.x",
-		"cross-env": "6.x.x",
-		"eslint": "6.x.x",
+		"cross-env": "7.x.x",
+		"eslint": "7.x.x",
 		"eslint-config-aether": "1.x.x",
-		"rollup": "1.x.x",
-		"rollup-plugin-babel": "4.x.x",
-		"rollup-plugin-babel-minify": "9.x.x"
+		"esm": "3.x.x",
+		"rollup": "2.x.x",
+		"rollup-plugin-terser": "7.x.x"
 	}
 }
