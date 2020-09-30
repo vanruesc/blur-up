@@ -67,7 +67,7 @@
 		"fs-extra": "9.x.x",
 		"glob": "7.x.x",
 		"sharp": "0.x.x",
-		"yargs-parser": "19.x.x"
+		"yargs-parser": "20.x.x"
 	},
 	"devDependencies": {
 		"@babel/core": "7.x.x",
