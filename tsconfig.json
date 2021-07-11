@@ -1,0 +1,16 @@
+{
+	"include": ["./src"],
+	"compilerOptions": {
+		"rootDir": "./src",
+		"moduleResolution": "node",
+		"module": "ESNext",
+		"target": "ESNext",
+		"strict": true,
+		"sourceMap": false,
+		"removeComments": true,
+		"skipLibCheck": true,
+		"strictNullChecks": false,
+		"esModuleInterop": true,
+		"allowSyntheticDefaultImports": true,
+	}
+}

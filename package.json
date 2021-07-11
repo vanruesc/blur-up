@@ -3,18 +3,21 @@
 	"version": "1.1.6",
 	"description": "A tool that generates image previews.",
 	"homepage": "https://github.com/vanruesc/blur-up",
-	"main": "build/svg-blur-up.js",
-	"module": "src/index.js",
+	"main": "dist/blur-up.cjs",
+	"types": "dist/types/index.d.ts",
 	"exports": {
-		".": "./src/index.js"
+		"import": "./dist/blur-up.js",
+		"require": "./dist/blur-up.cjs"
 	},
 	"bin": {
-		"blur-up": "./bin/cli.js"
+		"blur-up": "./dist/cli.cjs"
 	},
+	"type": "module",
 	"sideEffects": false,
 	"license": "Zlib",
 	"keywords": [
 		"lazy",
+		"loading",
 		"preview",
 		"image",
 		"embed",
@@ -35,52 +38,47 @@
 		"url": "https://github.com/vanruesc/blur-up/issues"
 	},
 	"files": [
-		"src",
-		"build",
-		"bin"
+		"dist"
 	],
 	"scripts": {
 		"ava": "ava",
-		"lint": "npm run lint:lib && npm run lint:test",
-		"lint:config": "eslint *.js",
-		"lint:lib": "eslint src",
-		"lint:test": "eslint test",
-		"build": "rollup -c",
-		"build:production": "cross-env NODE_ENV=production npm run build",
-		"pretest": "npm run lint && npm run build:production",
-		"test": "ava",
-		"prepack": "npm test && concat -o bin/cli.js shebang.txt bin/cli.js"
+		"build": "run-s build:*",
+		"build:js": "node esbuild",
+		"build:dts": "tsc -p tsconfig.d.json",
+		"clean": "del-cli dist test/generated",
+		"lint": "tsc --noemit && eslint src --fix",
+		"prepublishOnly": "npm test",
+		"test": "run-s lint clean build ava"
 	},
 	"ava": {
 		"failFast": true,
 		"files": [
-			"test/test.js"
-		],
-		"require": [
-			"esm"
+			"test/*.js"
 		]
 	},
 	"eslintConfig": {
-		"extends": "aether"
+		"extends": "aether/typescript"
 	},
 	"dependencies": {
-		"fs-extra": "9.x.x",
+		"fs-extra": "10.x.x",
 		"glob": "7.x.x",
 		"sharp": "0.x.x",
-		"yargs-parser": "20.x.x"
+		"yargs": "17.x.x"
 	},
 	"devDependencies": {
-		"@babel/core": "7.x.x",
-		"@babel/preset-env": "7.x.x",
-		"@rollup/plugin-babel": "5.x.x",
-		"@rollup/plugin-node-resolve": "9.x.x",
+		"@types/fs-extra": "9.x.x",
+		"@types/glob": "7.x.x",
+		"@types/sharp": "0.x.x",
+		"@types/yargs": "17.x.x",
+		"@typescript-eslint/eslint-plugin": "4.x.x",
+		"@typescript-eslint/parser": "4.x.x",
 		"ava": "3.x.x",
-		"concat": "1.x.x",
-		"cross-env": "7.x.x",
+		"del-cli": "4.x.x",
+		"esbuild": "0.x.x",
 		"eslint": "7.x.x",
 		"eslint-config-aether": "1.x.x",
-		"esm": "3.x.x",
-		"rollup": "2.x.x",
-		"rollup-plugin-terser": "7.x.x"
+		"npm-run-all": "4.x.x",
+		"tslib": "2.x.x",
+		"typescript": "4.x.x"
 	}
 }
