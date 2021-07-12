@@ -33,9 +33,7 @@ Promise<{ data: Buffer; info: OutputInfo }> {
 function embed(data: Buffer, outputInfo: OutputInfo, meta: Metadata,
 	options: BlurUpOptions): Buffer {
 
-	const dataURI =
-		`data:image/${meta.format};base64,${data.toString("base64")}`;
-
+	const uri = `data:image/${meta.format};base64,${data.toString("base64")}`;
 	const s = (options.width === undefined && options.height !== undefined) ?
 		Math.round(meta.height / outputInfo.height) :
 		Math.round(meta.width / outputInfo.width);
@@ -49,16 +47,16 @@ function embed(data: Buffer, outputInfo: OutputInfo, meta: Metadata,
 	const x = options.stdDeviationX;
 	const y = options.stdDeviationY;
 
-	return Buffer.from("<svg xmlns=\"http://www.w3.org/2000/svg\" " +
-		`xmlns:xlink="http://www.w3.org/1999/xlink" width="${w}" height="${h}" ` +
-		`viewBox="0 0 ${vw} ${vh}" preserveAspectRatio="none">` +
-		"<filter id=\"a\" filterUnits=\"userSpaceOnUse\" " +
-		"color-interpolation-filters=\"sRGB\">" +
+	return Buffer.from("<svg xmlns=\"http://www.w3.org/2000/svg\"" +
+		` xmlns:xlink="http://www.w3.org/1999/xlink" width="${w}" height="${h}"` +
+		` viewBox="0 0 ${vw} ${vh}" preserveAspectRatio="none">` +
+		"<filter id=\"a\" filterUnits=\"userSpaceOnUse\"" +
+		" color-interpolation-filters=\"sRGB\">" +
 		`<feGaussianBlur stdDeviation="${x} ${y}" edgeMode="duplicate"/>` +
 		"<feComponentTransfer><feFuncA type=\"discrete\" tableValues=\"1 1\"/>" +
 		"</feComponentTransfer></filter>" +
-		"<image filter=\"url(#a)\" x=\"0\" y=\"0\" height=\"100%\" width=\"100%\" " +
-		`xlink:href="${dataURI}"/></svg>`);
+		"<image filter=\"url(#a)\" x=\"0\" y=\"0\" height=\"100%\" width=\"100%\"" +
+		` xlink:href="${uri}"/></svg>`);
 
 }
 
