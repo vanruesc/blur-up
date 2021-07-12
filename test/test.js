@@ -1,6 +1,6 @@
 import fs from "fs-extra";
 import test from "ava";
-import BlurUp from "../dist/svg-blur-up.js";
+import blurUp from "../dist/svg-blur-up.js";
 
 test.before(t => {
 
@@ -10,10 +10,7 @@ test.before(t => {
 
 test("can generate an SVG", t => {
 
-	return BlurUp.generate(
-		"test/images/img.jpg",
-		"test/generated/a"
-	).then(() => {
+	return blurUp("test/images/img.jpg", "test/generated/a").then(() => {
 
 		const actual = fs.readFileSync("test/generated/a/img.svg", "utf8");
 		const expected = fs.readFileSync("test/expected/a/img.svg", "utf8");
@@ -26,7 +23,7 @@ test("can generate an SVG", t => {
 
 test("honors options", t => {
 
-	return BlurUp.generate("test/images/img.jpg", "test/generated/b", {
+	return blurUp("test/images/img.jpg", "test/generated/b", {
 		stdDeviationX: 30,
 		width: 20
 	}).then(() => {
@@ -42,7 +39,7 @@ test("honors options", t => {
 
 test("falls back to the input file name", t => {
 
-	return BlurUp.generate("test/images/img.jpg", "test/generated", {
+	return blurUp("test/images/img.jpg", "test/generated", {
 		stdDeviationX: 30,
 		width: 20
 	}).then(() => {

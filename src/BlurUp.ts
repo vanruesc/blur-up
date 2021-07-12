@@ -1,7 +1,6 @@
 import * as fs from "fs-extra";
 import * as path from "path";
-import sharp from "sharp";
-import { Metadata, OutputInfo, Sharp } from "sharp";
+import { default as sharp, Metadata, OutputInfo, Sharp } from "sharp";
 import { BlurUpOptions } from "./BlurUpOptions";
 
 /**
@@ -69,13 +68,12 @@ function embed(data: Buffer, outputInfo: OutputInfo, meta: Metadata,
  * @param input - The input path.
  * @param output - The output path.
  * @param data - The data to write.
- * @param options - The options.
  * @return A promise.
  */
 
-function writeFile(input: string, output: string, data: Buffer,
-	options: BlurUpOptions): Promise<void> {
+function writeFile(input: string, output: string, data: Buffer): Promise<void> {
 
+	// Check if the output path looks like a directory.
 	if(path.extname(output).length === 0) {
 
 		// Use the name of the input file.
@@ -89,44 +87,37 @@ function writeFile(input: string, output: string, data: Buffer,
 }
 
 /**
- * Generates image previews.
+ * Resizes an image file and embeds it in an SVG together with a blur filter.
+ *
+ * @param input - The input path.
+ * @param output - The output path.
+ * @param options - The options.
+ * @return A promise.
  */
 
-export class BlurUp {
+export function blurUp(input: string, output: string, options: BlurUpOptions):
+Promise<void> {
 
-	/**
-	 * Resizes an image file and embeds it in an SVG together with a blur filter.
-	 *
-	 * @param input - The input file.
-	 * @param output - The output directory.
-	 * @param params - The options.
-	 * @return A promise.
-	 */
+	// Define default values.
+	options = Object.assign({
+		stdDeviationX: 20,
+		stdDeviationY: 20
+	}, options);
 
-	static generate(input: string, output: string, params: BlurUpOptions = {}):
-	Promise<void> {
+	if(options.width === undefined && options.height === undefined) {
 
-		const options: BlurUpOptions = Object.assign({
-			stdDeviationX: 20,
-			stdDeviationY: 20
-		}, params);
-
-		if(options.width === undefined && options.height === undefined) {
-
-			options.width = 40;
-
-		}
-
-		const image = sharp(input);
-
-		return image.metadata().then((meta) => {
-
-			return resize(image, options)
-				.then(({ data, info }) => embed(data, info, meta, options))
-				.then(data => writeFile(input, output, data, options));
-
-		});
+		options.width = 40;
 
 	}
+
+	const image = sharp(input);
+
+	return image.metadata().then((meta) => {
+
+		return resize(image, options)
+			.then(({ data, info }) => embed(data, info, meta, options))
+			.then(data => writeFile(input, output, data));
+
+	});
 
 }
