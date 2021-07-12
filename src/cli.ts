@@ -172,10 +172,6 @@ function validateConfig(config: BlurUpConfig): Promise<BlurUpConfig> {
 
 			reject("No output path specified");
 
-		} else if(path.extname(config.output) !== "") {
-
-			reject("The output path must describe a directory");
-
 		} else {
 
 			if(!Array.isArray(config.input)) {
