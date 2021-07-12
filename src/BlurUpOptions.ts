@@ -1,7 +1,5 @@
 /**
- * Blur Up base options.
- *
- * Note: The client uses {@link BlurUpConfig}.
+ * Blur Up options.
  */
 
 export interface BlurUpOptions {
