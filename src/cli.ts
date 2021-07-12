@@ -16,6 +16,12 @@ const argv = yargs(process.argv.slice(2)).options({
 }).parseSync();
 
 /**
+ * A collection that maps input paths to output paths.
+ */
+
+const io = new Map<string, string>();
+
+/**
  * Generates the image previews.
  *
  * @param config - A configuration.
@@ -24,39 +30,39 @@ const argv = yargs(process.argv.slice(2)).options({
 
 function generate(config: BlurUpConfig): Promise<string> {
 
-	const input = config.input as string[];
+	const promises: Promise<void>[] = [];
 
-	return Promise.all(input.map((f) => {
+	for(const entry of io.entries()) {
 
-		return BlurUp.generate(f, config.output, config)
-			.catch((error) => console.warn(error));
+		promises.push(blurUp(entry[0], entry[1], config)
+			.catch((error) => console.warn(entry, error)));
 
-	})).then(() => {
+	}
 
-		const n = input.length;
-		return `Generated ${n} SVG ${(n === 1) ? "file" : "files"}`;
+	return Promise.all(promises).then(() => {
+
+		return `Generated ${io.size} SVG ${(io.size === 1) ? "file" : "files"}`;
 
 	});
 
 }
 
 /**
- * Resolves glob patterns and gathers input files.
+ * Deletes directory input paths.
  *
  * @param config - A configuration.
- * @return A promise that returns the configuration with updated input paths.
+ * @return A promise.
  */
 
-function resolveGlobPatterns(config: BlurUpConfig): Promise<BlurUpConfig> {
+function removeDirectories(): Promise<void[]> {
 
-	const input = config.input as string[];
-	let files: string[] = [];
+	const promises: Promise<void>[] = [];
 
-	return Promise.all(input.map((f) => {
+	for(const entry of io.entries()) {
 
-		return new Promise<void>((resolve, reject) => {
+		promises.push(new Promise<void>((resolve, reject) => {
 
-			glob(f, (error, result) => {
+			fs.lstat(entry[0], (error, stats) => {
 
 				if(error !== null) {
 
@@ -64,7 +70,59 @@ function resolveGlobPatterns(config: BlurUpConfig): Promise<BlurUpConfig> {
 
 				} else {
 
-					files = files.concat(result);
+					if(!stats.isFile()) {
+
+						io.delete(entry[0]);
+
+					}
+
+					resolve();
+
+				}
+
+			});
+
+		}));
+
+	}
+
+	return Promise.all(promises);
+
+}
+
+/**
+ * Resolves glob patterns and prepares IO paths.
+ *
+ * @param config - A configuration.
+ * @return A promise that returns the configuration with IO paths.
+ */
+
+function resolveGlobPatterns(config: BlurUpConfig): Promise<BlurUpConfig> {
+
+	const patterns = config.input as string[];
+
+	return Promise.all(patterns.map((p) => {
+
+		const base = p.split("/*")[0];
+
+		return new Promise<void>((resolve, reject) => {
+
+			glob(p, (error, paths) => {
+
+				if(error !== null) {
+
+					reject(error);
+
+				} else {
+
+					for(const input of paths) {
+
+						let output = path.join(config.output, input.replace(base, ""));
+						output = output.replace(path.extname(output), ".svg");
+						io.set(input, output);
+
+					}
+
 					resolve();
 
 				}
@@ -73,12 +131,7 @@ function resolveGlobPatterns(config: BlurUpConfig): Promise<BlurUpConfig> {
 
 		});
 
-	})).then(() => {
-
-		config.input = files;
-		return config;
-
-	});
+	})).then(removeDirectories).then(() => config);
 
 }
 
