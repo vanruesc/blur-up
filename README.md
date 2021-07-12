@@ -1,6 +1,6 @@
 # Blur Up
 
-[![CI](https://badgen.net/github/checks/vanruesc/blur-up/main)](https://github.com/vanruesc/blur-up/actions)
+[![CI](https://github.com/vanruesc/blur-up/actions/workflows/ci.yml/badge.svg)](https://github.com/vanruesc/blur-up/actions/workflows/ci.yml)
 [![Version](https://badgen.net/npm/v/svg-blur-up?color=green)](https://www.npmjs.com/package/svg-blur-up)
 [![Dependencies](https://david-dm.org/vanruesc/blur-up.svg?branch=master)](https://david-dm.org/vanruesc/blur-up)
 
