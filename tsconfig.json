@@ -7,7 +7,6 @@
 		"target": "ESNext",
 		"strict": true,
 		"sourceMap": false,
-		"removeComments": true,
 		"skipLibCheck": true,
 		"strictNullChecks": false,
 		"esModuleInterop": true,
