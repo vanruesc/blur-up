@@ -251,8 +251,7 @@ function readConfig(): Promise<BlurUpConfig> {
 
 	return pkgConfigPromise.then((config) => {
 
-		return (config !== undefined) ?
-			Promise.resolve(config) : configFilePromise;
+		return config ? Promise.resolve(config) : configFilePromise;
 
 	});
 
