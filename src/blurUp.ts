@@ -1,24 +1,7 @@
 import * as fs from "fs-extra";
 import * as path from "path";
-import { default as sharp, Metadata, OutputInfo, Sharp } from "sharp";
+import { default as sharp, Metadata, OutputInfo } from "sharp";
 import { BlurUpOptions } from "./BlurUpOptions";
-
-/**
- * Resizes the given image.
- *
- * @param image - The Sharp instance.
- * @param options - The options.
- * @return A promise that returns the image data and additional info.
- */
-
-function resize(image: Sharp, options: BlurUpOptions):
-Promise<{ data: Buffer; info: OutputInfo }> {
-
-	return image.resize(options.width, options.height).toBuffer({
-		resolveWithObject: true
-	});
-
-}
 
 /**
  * Embeds the given image data in an SVG file.
@@ -112,7 +95,8 @@ Promise<void> {
 
 	return image.metadata().then((meta) => {
 
-		return resize(image, options)
+		return image.resize(options.width, options.height)
+			.toBuffer({ resolveWithObject: true })
 			.then(({ data, info }) => embed(data, info, meta, options))
 			.then(data => writeFile(input, output, data));
 
