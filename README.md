@@ -2,7 +2,6 @@
 
 [![CI](https://github.com/vanruesc/blur-up/actions/workflows/ci.yml/badge.svg)](https://github.com/vanruesc/blur-up/actions/workflows/ci.yml)
 [![Version](https://badgen.net/npm/v/svg-blur-up?color=green)](https://www.npmjs.com/package/svg-blur-up)
-[![Dependencies](https://david-dm.org/vanruesc/blur-up.svg?branch=master)](https://david-dm.org/vanruesc/blur-up)
 
 A tool that creates a small, optimized version of an input image and embeds it in an SVG file. The generated SVG file scales the integrated image up to its original dimensions and applies a blur filter to create a high quality preview of the original image. Such preview SVGs can be used as temporary substitutes for images that take longer to load.
 
