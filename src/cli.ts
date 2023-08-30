@@ -1,9 +1,9 @@
 import * as fs from "fs-extra";
 import * as path from "path";
-import glob from "glob";
 import yargs from "yargs";
-import { blurUp } from "./blurUp";
-import { BlurUpConfig } from "./BlurUpConfig";
+import { glob } from "glob";
+import { blurUp } from "./blurUp.js";
+import { BlurUpConfig } from "./BlurUpConfig.js";
 
 /**
  * The parsed arguments.
@@ -34,8 +34,10 @@ function generate(config: BlurUpConfig): Promise<string> {
 
 	for(const entry of io.entries()) {
 
-		promises.push(blurUp(entry[0], entry[1], config)
-			.catch((error) => console.warn(entry, error)));
+		promises.push(
+			blurUp(entry[0], entry[1], config)
+				.catch((error) => console.warn(entry, error))
+		);
 
 	}
 
@@ -107,27 +109,19 @@ function resolveGlobPatterns(config: BlurUpConfig): Promise<BlurUpConfig> {
 
 		return new Promise<void>((resolve, reject) => {
 
-			glob(p, (error, paths) => {
+			glob(p).then((paths) => {
 
-				if(error !== null) {
+				for(const input of paths) {
 
-					reject(error);
-
-				} else {
-
-					for(const input of paths) {
-
-						let output = path.join(config.output, input.replace(base, ""));
-						output = output.replace(path.extname(output), ".svg");
-						io.set(input, output);
-
-					}
-
-					resolve();
+					let output = path.join(config.output as string, input.replace(base, ""));
+					output = output.replace(path.extname(output), ".svg");
+					io.set(input, output);
 
 				}
 
-			});
+				resolve();
+
+			}).catch((e) => reject(e));
 
 		});
 
@@ -142,45 +136,41 @@ function resolveGlobPatterns(config: BlurUpConfig): Promise<BlurUpConfig> {
  * @return A promise that returns the validated configuration.
  */
 
-function validateConfig(config: BlurUpConfig): Promise<BlurUpConfig> {
+function validateConfig(config: BlurUpConfig | null): Promise<BlurUpConfig> {
 
-	if(config === null) {
-
-		config = {};
-
-	}
+	const result = (config !== null) ? config : {};
 
 	return new Promise((resolve, reject) => {
 
 		if(argv.input !== null) {
 
-			config.input = argv.input as string;
+			result.input = argv.input;
 
 		}
 
 		if(argv.output !== null) {
 
-			config.output = argv.output as string;
+			result.output = argv.output;
 
 		}
 
-		if(config.input === undefined) {
+		if(result.input === undefined) {
 
 			reject("No input path specified");
 
-		} else if(config.output === undefined) {
+		} else if(result.output === undefined) {
 
 			reject("No output path specified");
 
 		} else {
 
-			if(!Array.isArray(config.input)) {
+			if(!Array.isArray(result.input)) {
 
-				config.input = [config.input];
+				result.input = [result.input];
 
 			}
 
-			resolve(config);
+			resolve(result);
 
 		}
 
@@ -194,17 +184,17 @@ function validateConfig(config: BlurUpConfig): Promise<BlurUpConfig> {
  * @return A promise that returns the configuration.
  */
 
-function readConfig(): Promise<BlurUpConfig> {
+function readConfig(): Promise<BlurUpConfig | null> {
 
 	// Checks if the package file contains a configuration.
-	const pkgConfigPromise = new Promise<BlurUpConfig>((resolve, reject) => {
+	const pkgConfigPromise = new Promise<BlurUpConfig | null>((resolve, reject) => {
 
 		fs.readFile(path.join(process.cwd(), "package.json")).then((data) => {
 
 			const pkg = JSON.parse(data.toString()) as { blurUp: BlurUpConfig };
 			resolve(pkg.blurUp);
 
-		}).catch((error) => {
+		}).catch(() => {
 
 			// Invalid or missing package.json, ignore.
 			resolve(null);
@@ -214,11 +204,10 @@ function readConfig(): Promise<BlurUpConfig> {
 	});
 
 	// Looks for a configuration file.
-	const configFilePromise = new Promise<BlurUpConfig>((resolve, reject) => {
+	const configFilePromise = new Promise<BlurUpConfig | null>((resolve, reject) => {
 
 		// Check if the user specified an alternative configuration path.
-		const configPath = path.join(process.cwd(), (argv.config === null) ?
-			".blur-up.json" : argv.config);
+		const configPath = path.join(process.cwd(), (argv.config === null) ? ".blur-up.json" : argv.config);
 
 		fs.readFile(configPath).then((data) => {
 
@@ -239,7 +228,7 @@ function readConfig(): Promise<BlurUpConfig> {
 
 				} else {
 
-					reject(`Failed to read the configuration file (${error.toString()})`);
+					reject(`Failed to read the configuration file (${error.message})`);
 
 				}
 
@@ -251,7 +240,7 @@ function readConfig(): Promise<BlurUpConfig> {
 
 	return pkgConfigPromise.then((config) => {
 
-		return config ? Promise.resolve(config) : configFilePromise;
+		return config !== null ? Promise.resolve(config) : configFilePromise;
 
 	});
 

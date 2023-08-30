@@ -1,4 +1,4 @@
-import { BlurUpOptions } from "./BlurUpOptions";
+import { BlurUpOptions } from "./BlurUpOptions.js";
 
 /**
  * The Blur Up config.

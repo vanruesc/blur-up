@@ -1,7 +1,7 @@
 import * as fs from "fs-extra";
 import * as path from "path";
 import { default as sharp, Metadata, OutputInfo } from "sharp";
-import { BlurUpOptions } from "./BlurUpOptions";
+import { BlurUpOptions } from "./BlurUpOptions.js";
 
 /**
  * Embeds the given image data in an SVG file.
@@ -13,8 +13,10 @@ import { BlurUpOptions } from "./BlurUpOptions";
  * @return The SVG data.
  */
 
-function embed(data: Buffer, outputInfo: OutputInfo, meta: Metadata,
-	options: BlurUpOptions): Buffer {
+function embed(data: Buffer, outputInfo: OutputInfo, meta: Metadata, options: BlurUpOptions): Buffer {
+
+	meta.height = meta.height !== undefined ? meta.height : 0;
+	meta.width = meta.width !== undefined ? meta.width : 0;
 
 	const uri = `data:image/${meta.format};base64,${data.toString("base64")}`;
 	const s = (options.width === undefined && options.height !== undefined) ?
@@ -76,8 +78,7 @@ function writeFile(input: string, output: string, data: Buffer): Promise<void> {
  * @return A promise.
  */
 
-export function blurUp(input: string, output: string, options: BlurUpOptions):
-Promise<void> {
+export function blurUp(input: string, output: string, options: BlurUpOptions): Promise<void> {
 
 	// Define default values.
 	options = Object.assign({
@@ -93,13 +94,10 @@ Promise<void> {
 
 	const image = sharp(input);
 
-	return image.metadata().then((meta) => {
-
-		return image.resize(options.width, options.height)
-			.toBuffer({ resolveWithObject: true })
-			.then(({ data, info }) => embed(data, info, meta, options))
-			.then(data => writeFile(input, output, data));
-
-	});
+	return image.metadata().then((meta) => image
+		.resize(options.width, options.height)
+		.toBuffer({ resolveWithObject: true })
+		.then(({ data, info }) => embed(data, info, meta, options))
+		.then(data => writeFile(input, output, data)));
 
 }
