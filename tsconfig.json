@@ -1,15 +1,17 @@
 {
-	"include": ["./src"],
+	"include": ["./*.js", "./src", "./test"],
 	"compilerOptions": {
-		"rootDir": "./src",
+		"baseUrl": ".",
+		"outDir": "./dist",
 		"moduleResolution": "node",
 		"module": "ESNext",
 		"target": "ESNext",
 		"strict": true,
 		"sourceMap": false,
 		"skipLibCheck": true,
-		"strictNullChecks": false,
-		"esModuleInterop": true,
-		"allowSyntheticDefaultImports": true,
+		"importHelpers": true,
+		"resolveJsonModule": true,
+		"noImplicitOverride": true,
+		"allowSyntheticDefaultImports": true
 	}
 }
