@@ -3,18 +3,26 @@
 	"version": "2.0.1",
 	"description": "A tool that generates image previews.",
 	"homepage": "https://github.com/vanruesc/blur-up",
-	"main": "dist/blur-up.cjs",
-	"types": "dist/types/index.d.ts",
+	"license": "Zlib",
+	"type": "module",
+	"sideEffects": false,
+	"main": "./dist/index.cjs",
+	"module": "./dist/index.js",
+	"types": "./dist/types/index.d.ts",
 	"exports": {
-		"import": "./dist/blur-up.js",
-		"require": "./dist/blur-up.cjs"
+		".": {
+			"import": {
+				"types": "./dist/types/index.d.ts",
+				"default": "./dist/index.js"
+			},
+			"require": {
+				"default": "./dist/index.cjs"
+			}
+		}
 	},
 	"bin": {
 		"blur-up": "./dist/cli.cjs"
 	},
-	"type": "module",
-	"sideEffects": false,
-	"license": "Zlib",
 	"keywords": [
 		"lazy",
 		"loading",
@@ -60,25 +68,24 @@
 		"extends": "aether/typescript"
 	},
 	"dependencies": {
-		"fs-extra": "10.x.x",
-		"glob": "7.x.x",
+		"fs-extra": "11.x.x",
+		"glob": "10.x.x",
 		"sharp": "0.x.x",
 		"yargs": "17.x.x"
 	},
 	"devDependencies": {
-		"@types/fs-extra": "9.x.x",
-		"@types/glob": "7.x.x",
-		"@types/sharp": "0.x.x",
+		"@types/fs-extra": "11.x.x",
+		"@types/glob": "8.x.x",
 		"@types/yargs": "17.x.x",
-		"@typescript-eslint/eslint-plugin": "4.x.x",
-		"@typescript-eslint/parser": "4.x.x",
-		"ava": "3.x.x",
-		"del-cli": "4.x.x",
+		"@typescript-eslint/eslint-plugin": "6.x.x",
+		"@typescript-eslint/parser": "6.x.x",
+		"ava": "5.x.x",
+		"del-cli": "5.x.x",
 		"esbuild": "0.x.x",
-		"eslint": "7.x.x",
+		"eslint": "8.x.x",
 		"eslint-config-aether": "1.x.x",
 		"npm-run-all": "4.x.x",
 		"tslib": "2.x.x",
-		"typescript": "4.x.x"
+		"typescript": "5.x.x"
 	}
 }
