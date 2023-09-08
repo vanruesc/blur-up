@@ -66,14 +66,13 @@
 		"test": "run-s lint clean build ava"
 	},
 	"dependencies": {
-		"fs-extra": "11.x.x",
 		"glob": "10.x.x",
 		"sharp": "0.x.x",
 		"yargs": "17.x.x"
 	},
 	"devDependencies": {
-		"@types/fs-extra": "11.x.x",
 		"@types/glob": "8.x.x",
+		"@types/node": "20.x.x",
 		"@types/yargs": "17.x.x",
 		"@typescript-eslint/eslint-plugin": "6.x.x",
 		"@typescript-eslint/parser": "6.x.x",
