@@ -32,6 +32,3 @@ jobs:
       - if: ${{ steps.publish.outputs.type }}
         run: |
           echo "Version changed: ${{ steps.publish.outputs.old-version }} → ${{ steps.publish.outputs.version }}"
-      - if: ${{ !steps.publish.outputs.type }}
-        run: |
-          pnpm run prepublishOnly
