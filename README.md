@@ -7,7 +7,7 @@ A tool that creates a small, optimized version of an input image and embeds it i
 
 | Preview SVG | Original Image   |
 |-------------|------------------|
-| 1082 Bytes  | 402.15 Kilobytes |
+| 1086 Bytes  | 402.15 Kilobytes |
 | <img src="https://vanruesc.github.io/blur-up/test/expected/img.svg" width="250"> | <img src="https://vanruesc.github.io/blur-up/test/images/img.jpg" width="250"> |
 
 
