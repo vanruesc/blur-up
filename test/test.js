@@ -1,19 +1,22 @@
-import fs from "fs-extra";
 import test from "ava";
-import blurUp from "../dist/svg-blur-up.js";
+import { access, readFile, rm, constants } from "fs/promises";
+import { blurUp } from "svg-blur-up";
 
-test.before(t => {
+test.before(async() => {
 
-	return fs.remove("test/generated");
+	return rm("test/generated", {
+		recursive: true,
+		force: true
+	});
 
 });
 
-test("can generate an SVG", t => {
+test("can generate an SVG", async(t) => {
 
-	return blurUp("test/images/img.jpg", "test/generated/a").then(() => {
+	return blurUp("test/images/img.jpg", "test/generated/a").then(async() => {
 
-		const actual = fs.readFileSync("test/generated/a/img.svg", "utf8");
-		const expected = fs.readFileSync("test/expected/a/img.svg", "utf8");
+		const actual = await readFile("test/generated/a/img.svg", "utf8");
+		const expected = await readFile("test/expected/a/img.svg", "utf8");
 
 		t.is(actual, expected);
 
@@ -21,15 +24,15 @@ test("can generate an SVG", t => {
 
 });
 
-test("honors options", t => {
+test("honors options", async(t) => {
 
 	return blurUp("test/images/img.jpg", "test/generated/b", {
 		stdDeviationX: 30,
 		width: 20
-	}).then(() => {
+	}).then(async() => {
 
-		const actual = fs.readFileSync("test/generated/b/img.svg", "utf8");
-		const expected = fs.readFileSync("test/expected/b/img.svg", "utf8");
+		const actual = await readFile("test/generated/b/img.svg", "utf8");
+		const expected = await readFile("test/expected/b/img.svg", "utf8");
 
 		t.is(actual, expected);
 
@@ -37,19 +40,15 @@ test("honors options", t => {
 
 });
 
-test("falls back to the input file name", t => {
+test("falls back to the input file name", async(t) => {
 
 	return blurUp("test/images/img.jpg", "test/generated", {
 		stdDeviationX: 30,
 		width: 20
-	}).then(() => {
+	}).then(async() => access("test/generated/img.svg", constants.F_OK).then((error) => {
 
-		return fs.access("test/generated/img.svg", fs.F_OK).then((error) => {
+		t.is(error, undefined);
 
-			t.is(error, undefined);
-
-		});
-
-	});
+	}));
 
 });

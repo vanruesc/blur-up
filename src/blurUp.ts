@@ -1,4 +1,4 @@
-import * as fs from "fs-extra";
+import { mkdir, writeFile } from "fs/promises";
 import * as path from "path";
 import { default as sharp, Metadata, OutputInfo } from "sharp";
 import { BlurUpOptions } from "./BlurUpOptions.js";
@@ -54,7 +54,7 @@ function embed(data: Buffer, outputInfo: OutputInfo, meta: Metadata, options: Bl
  * @return A promise.
  */
 
-function writeFile(input: string, output: string, data: Buffer): Promise<void> {
+function saveFile(input: string, output: string, data: Buffer): Promise<void> {
 
 	// Check if the output path looks like a directory.
 	if(path.extname(output).length === 0) {
@@ -65,7 +65,8 @@ function writeFile(input: string, output: string, data: Buffer): Promise<void> {
 
 	}
 
-	return fs.outputFile(output, data);
+	return mkdir(path.dirname(output), { recursive: true })
+		.then(() => writeFile(output, data));
 
 }
 
@@ -98,6 +99,6 @@ export function blurUp(input: string, output: string, options: BlurUpOptions): P
 		.resize(options.width, options.height)
 		.toBuffer({ resolveWithObject: true })
 		.then(({ data, info }) => embed(data, info, meta, options))
-		.then(data => writeFile(input, output, data)));
+		.then(data => saveFile(input, output, data)));
 
 }

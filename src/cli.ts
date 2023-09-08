@@ -1,4 +1,4 @@
-import * as fs from "fs-extra";
+import { lstat, readFile } from "fs/promises";
 import * as path from "path";
 import yargs from "yargs";
 import { glob } from "glob";
@@ -64,25 +64,17 @@ function removeDirectories(): Promise<void[]> {
 
 		promises.push(new Promise<void>((resolve, reject) => {
 
-			fs.lstat(entry[0], (error, stats) => {
+			lstat(entry[0]).then((stats) => {
 
-				if(error !== null) {
+				if(!stats.isFile()) {
 
-					reject(error);
-
-				} else {
-
-					if(!stats.isFile()) {
-
-						io.delete(entry[0]);
-
-					}
-
-					resolve();
+					io.delete(entry[0]);
 
 				}
 
-			});
+				resolve();
+
+			}).catch(reject);
 
 		}));
 
@@ -138,7 +130,7 @@ function resolveGlobPatterns(config: BlurUpConfig): Promise<BlurUpConfig> {
 
 function validateConfig(config: BlurUpConfig | null): Promise<BlurUpConfig> {
 
-	const result = (config !== null) ? config : {};
+	const result = config || {};
 
 	return new Promise((resolve, reject) => {
 
@@ -189,7 +181,7 @@ function readConfig(): Promise<BlurUpConfig | null> {
 	// Checks if the package file contains a configuration.
 	const pkgConfigPromise = new Promise<BlurUpConfig | null>((resolve, reject) => {
 
-		fs.readFile(path.join(process.cwd(), "package.json")).then((data) => {
+		readFile(path.join(process.cwd(), "package.json")).then((data) => {
 
 			const pkg = JSON.parse(data.toString()) as { blurUp: BlurUpConfig };
 			resolve(pkg.blurUp);
@@ -209,7 +201,7 @@ function readConfig(): Promise<BlurUpConfig | null> {
 		// Check if the user specified an alternative configuration path.
 		const configPath = path.join(process.cwd(), (argv.config === null) ? ".blur-up.json" : argv.config);
 
-		fs.readFile(configPath).then((data) => {
+		readFile(configPath).then((data) => {
 
 			resolve(JSON.parse(data.toString()) as BlurUpConfig);
 
