@@ -34,8 +34,7 @@
 		"email": "vanruesc@outlook.de"
 	},
 	"repository": {
-		"type": "git",
-		"url": "https://github.com/vanruesc/blur-up.git"
+		"url": "git+https://github.com/vanruesc/blur-up.git"
 	},
 	"bugs": {
 		"url": "https://github.com/vanruesc/blur-up/issues"
