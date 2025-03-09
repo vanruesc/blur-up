@@ -105,7 +105,7 @@ function resolveGlobPatterns(config: BlurUpConfig): Promise<BlurUpConfig> {
 
 				for(const input of paths) {
 
-					let output = path.join(config.output as string, input.replace(base, ""));
+					let output = path.join(config.output!, input.replace(base, ""));
 					output = output.replace(path.extname(output), ".svg");
 					io.set(input, output);
 
@@ -113,7 +113,7 @@ function resolveGlobPatterns(config: BlurUpConfig): Promise<BlurUpConfig> {
 
 				resolve();
 
-			}).catch((e) => reject(e));
+			}).catch((e: Error) => reject(e));
 
 		});
 
@@ -130,7 +130,7 @@ function resolveGlobPatterns(config: BlurUpConfig): Promise<BlurUpConfig> {
 
 function validateConfig(config: BlurUpConfig | null): Promise<BlurUpConfig> {
 
-	const result = config || {};
+	const result = config ?? {};
 
 	return new Promise((resolve, reject) => {
 
@@ -148,11 +148,11 @@ function validateConfig(config: BlurUpConfig | null): Promise<BlurUpConfig> {
 
 		if(result.input === undefined) {
 
-			reject("No input path specified");
+			reject(new Error("No input path specified"));
 
 		} else if(result.output === undefined) {
 
-			reject("No output path specified");
+			reject(new Error("No output path specified"));
 
 		} else {
 
@@ -199,7 +199,7 @@ function readConfig(): Promise<BlurUpConfig | null> {
 	const configFilePromise = new Promise<BlurUpConfig | null>((resolve, reject) => {
 
 		// Check if the user specified an alternative configuration path.
-		const configPath = path.join(process.cwd(), (argv.config === null) ? ".blur-up.json" : argv.config);
+		const configPath = path.join(process.cwd(), argv.config ?? ".blur-up.json");
 
 		readFile(configPath).then((data) => {
 
@@ -216,11 +216,11 @@ function readConfig(): Promise<BlurUpConfig | null> {
 
 				if(error.code === "ENOENT") {
 
-					reject(`Could not find the configuration file (${configPath})`);
+					reject(new Error(`Could not find the configuration file (${configPath})`));
 
 				} else {
 
-					reject(`Failed to read the configuration file (${error.message})`);
+					reject(new Error(`Failed to read the configuration file (${error.message})`));
 
 				}
 

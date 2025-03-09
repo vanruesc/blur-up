@@ -15,8 +15,8 @@ import { BlurUpOptions } from "./BlurUpOptions.js";
 
 function embed(data: Buffer, outputInfo: OutputInfo, meta: Metadata, options: BlurUpOptions): Buffer {
 
-	meta.height = meta.height !== undefined ? meta.height : 0;
-	meta.width = meta.width !== undefined ? meta.width : 0;
+	meta.height = meta.height ?? 0;
+	meta.width = meta.width ?? 0;
 
 	const uri = `data:image/${meta.format};base64,${data.toString("base64")}`;
 	const s = (options.width === undefined && options.height !== undefined) ?
