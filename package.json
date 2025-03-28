@@ -51,8 +51,10 @@
 			"test/*.js"
 		]
 	},
-	"eslintConfig": {
-		"extends": "aether/typescript"
+	"pnpm": {
+		"onlyBuiltDependencies": [
+			"esbuild"
+		]
 	},
 	"scripts": {
 		"ava": "ava",
@@ -75,8 +77,8 @@
 		"@types/yargs": "17.x.x",
 		"@typescript-eslint/eslint-plugin": "8.x.x",
 		"@typescript-eslint/parser": "8.x.x",
-		"ava": "5.x.x",
-		"del-cli": "5.x.x",
+		"ava": "6.x.x",
+		"del-cli": "6.x.x",
 		"esbuild": "0.25.x",
 		"eslint": "9.x.x",
 		"eslint-config-aether": "2.x.x",
