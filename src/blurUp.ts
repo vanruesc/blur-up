@@ -3,6 +3,49 @@ import * as path from "path";
 import { default as sharp, Metadata, OutputInfo } from "sharp";
 import { BlurUpOptions } from "./BlurUpOptions.js";
 
+declare type IHDRType = "G" | "RGB" | "Indexed" | "GA" | "RGBA" | "";
+const ihdrTypes: IHDRType[] = ["G", "", "RGB", "Indexed", "GA", "", "RGBA"];
+
+// eslint-disable-next-line @typescript-eslint/naming-convention
+interface IHDRData {
+
+	depth: number;
+	type: IHDRType;
+	buffer: ArrayBufferLike;
+	alpha: boolean;
+
+}
+
+/**
+ * Check if the given image data contains transparent pixels.
+ *
+ * @see https://stackoverflow.com/questions/41287823/check-image-transparency
+ */
+
+function getIHDRData(data: Buffer<ArrayBufferLike>): IHDRData | null {
+
+	const view = new DataView(data.buffer);
+
+	if(view.getUint32(0) !== 0x89504E47 || view.getUint32(4) !== 0x0D0A1A0A) {
+
+		// Not a PNG file.
+		return null;
+
+	}
+
+	// Extract the IHDR info which exists at offset 8 +8 bytes (size, name) +8 (depth) and +9 (type).
+	const depth = view.getUint8(8 + 8 + 8);
+	const type = view.getUint8(8 + 8 + 9);
+
+	return {
+		depth: depth,
+		type: ihdrTypes[type],
+		buffer: view.buffer,
+		alpha: type === 4 || type === 6 // grayscale + alpha or RGB + alpha
+	};
+
+}
+
 /**
  * Embeds the given image data in an SVG file.
  *
@@ -32,16 +75,20 @@ function embed(data: Buffer, outputInfo: OutputInfo, meta: Metadata, options: Bl
 	const x = options.stdDeviationX;
 	const y = options.stdDeviationY;
 
+	// Prevent blurring around the edges of opaque images.
+	const alpha = options.alpha! && (getIHDRData(data)?.alpha ?? false);
+	const feComponentTransfer = !alpha ?
+		"<feComponentTransfer><feFuncA type=\"discrete\" tableValues=\"1 1\"/></feComponentTransfer>" :
+		"";
+
 	return Buffer.from("<svg xmlns=\"http://www.w3.org/2000/svg\"" +
 		` xmlns:xlink="http://www.w3.org/1999/xlink" width="${w}" height="${h}"` +
 		` viewBox="0 0 ${vw} ${vh}" preserveAspectRatio="none">` +
-		"<filter id=\"a\" filterUnits=\"userSpaceOnUse\"" +
-		" color-interpolation-filters=\"sRGB\">" +
-		`<feGaussianBlur stdDeviation="${x} ${y}" edgeMode="duplicate"/>` +
-		"<feComponentTransfer><feFuncA type=\"discrete\" tableValues=\"1 1\"/>" +
-		"</feComponentTransfer></filter>" +
-		"<image filter=\"url(#a)\" x=\"0\" y=\"0\" height=\"100%\" width=\"100%\"" +
-		` xlink:href="${uri}"/></svg>`);
+		"<filter id=\"a\" filterUnits=\"userSpaceOnUse\" color-interpolation-filters=\"sRGB\">" +
+		`<feGaussianBlur stdDeviation="${x} ${y}" edgeMode="duplicate"/>${feComponentTransfer}` +
+		"</filter>" +
+		`<image filter="url(#a)" x="0" y="0" height="100%" width="100%" xlink:href="${uri}"/></svg>`
+	);
 
 }
 
@@ -84,7 +131,8 @@ export async function blurUp(input: string, output: string, options: BlurUpOptio
 	// Define default values.
 	options = Object.assign({
 		stdDeviationX: 20,
-		stdDeviationY: 20
+		stdDeviationY: 20,
+		alpha: true
 	}, options);
 
 	if(options.width === undefined && options.height === undefined) {

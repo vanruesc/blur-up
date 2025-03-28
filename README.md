@@ -8,7 +8,7 @@ A tool that creates a small, optimized version of an input image and embeds it i
 | Original Image | Preview SVG   |
 |----------------|---------------|
 | 402.15 KiB     | 1.1 KiB       |
-| <img src="https://vanruesc.github.io/blur-up/test/images/img.jpg" width="250"> | <img src="https://vanruesc.github.io/blur-up/test/expected/img.svg" width="250"> |
+| <img src="https://vanruesc.github.io/blur-up/test/images/img.jpg" width="250"> | <img src="https://vanruesc.github.io/blur-up/test/images/img.svg" width="250"> |
 
 
 ## Installation
@@ -69,14 +69,15 @@ Note: The generated SVG file will be minified.
 
 ## Options
 
-| Option        | Default  | Description                                |
-|---------------|----------|--------------------------------------------|
-| input         | -        | Can be a single path or an array of paths  |
-| output        | -        | A path that describes a file or directory  |
-| stdDeviationX | 20       | The blur strength along the X-axis         |
-| stdDeviationY | 20       | The blur strength along the Y-axis         |
-| width         | auto, 40 | The width of the preview image             |
-| height        | auto     | The height of the preview image            |
+| Option        | Default  | Description                                       |
+|---------------|----------|---------------------------------------------------|
+| input         | -        | Can be a single path or an array of paths         |
+| output        | -        | A path that describes a file or directory         |
+| stdDeviationX | 20       | The blur strength along the X-axis                |
+| stdDeviationY | 20       | The blur strength along the Y-axis                |
+| width         | auto, 40 | The width of the preview image                    |
+| height        | auto     | The height of the preview image                   |
+| alpha         | true     | Enables alpha blurring for transparent PNG images |
 
 The command line options `--input` and `--output` overwrite the respective fields in the configuration.
 
