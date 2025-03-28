@@ -39,8 +39,6 @@ You may provide a configuration via `package.json` or as a standalone file. If t
 
 ### JavaScript API
 
-The `blurUp` function returns a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises).
-
 ```javascript
 import blurUp from "svg-blur-up";
 
