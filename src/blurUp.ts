@@ -54,7 +54,7 @@ function embed(data: Buffer, outputInfo: OutputInfo, meta: Metadata, options: Bl
  * @return A promise.
  */
 
-function saveFile(input: string, output: string, data: Buffer): Promise<void> {
+async function saveFile(input: string, output: string, data: Buffer): Promise<void> {
 
 	// Check if the output path looks like a directory.
 	if(path.extname(output).length === 0) {
@@ -65,8 +65,8 @@ function saveFile(input: string, output: string, data: Buffer): Promise<void> {
 
 	}
 
-	return mkdir(path.dirname(output), { recursive: true })
-		.then(() => writeFile(output, data));
+	await mkdir(path.dirname(output), { recursive: true });
+	return await writeFile(output, data);
 
 }
 
@@ -76,10 +76,10 @@ function saveFile(input: string, output: string, data: Buffer): Promise<void> {
  * @param input - The input path.
  * @param output - The output path.
  * @param options - The options.
- * @return A promise.
+ * @return A promise that resolves when the image has been generated.
  */
 
-export function blurUp(input: string, output: string, options: BlurUpOptions): Promise<void> {
+export async function blurUp(input: string, output: string, options: BlurUpOptions): Promise<void> {
 
 	// Define default values.
 	options = Object.assign({
@@ -95,10 +95,11 @@ export function blurUp(input: string, output: string, options: BlurUpOptions): P
 
 	const image = sharp(input);
 
-	return image.metadata().then((meta) => image
+	const meta = await image.metadata();
+	const { data, info } = await image
 		.resize(options.width, options.height)
-		.toBuffer({ resolveWithObject: true })
-		.then(({ data, info }) => embed(data, info, meta, options))
-		.then(data => saveFile(input, output, data)));
+		.toBuffer({ resolveWithObject: true });
+
+	return await saveFile(input, output, embed(data, info, meta, options));
 
 }

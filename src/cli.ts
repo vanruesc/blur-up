@@ -28,24 +28,18 @@ const io = new Map<string, string>();
  * @return A promise that returns an info message.
  */
 
-function generate(config: BlurUpConfig): Promise<string> {
+async function generate(config: BlurUpConfig): Promise<string> {
 
 	const promises: Promise<void>[] = [];
 
 	for(const entry of io.entries()) {
 
-		promises.push(
-			blurUp(entry[0], entry[1], config)
-				.catch((error) => console.warn(entry, error))
-		);
+		promises.push(blurUp(entry[0], entry[1], config).catch((error) => console.warn(entry, error)));
 
 	}
 
-	return Promise.all(promises).then(() => {
-
-		return `Generated ${io.size} SVG ${(io.size === 1) ? "file" : "files"}`;
-
-	});
+	await Promise.all(promises);
+	return `Generated ${io.size} SVG ${(io.size === 1) ? "file" : "files"}`;
 
 }
 
@@ -91,11 +85,11 @@ function removeDirectories(): Promise<void[]> {
  * @return A promise that returns the configuration with IO paths.
  */
 
-function resolveGlobPatterns(config: BlurUpConfig): Promise<BlurUpConfig> {
+async function resolveGlobPatterns(config: BlurUpConfig): Promise<BlurUpConfig> {
 
 	const patterns = config.input as string[];
 
-	return Promise.all(patterns.map((p) => {
+	await Promise.all(patterns.map((p) => {
 
 		const base = p.split("/*")[0];
 
@@ -117,7 +111,10 @@ function resolveGlobPatterns(config: BlurUpConfig): Promise<BlurUpConfig> {
 
 		});
 
-	})).then(removeDirectories).then(() => config);
+	}));
+
+	await removeDirectories();
+	return config;
 
 }
 
@@ -176,7 +173,7 @@ function validateConfig(config: BlurUpConfig | null): Promise<BlurUpConfig> {
  * @return A promise that returns the configuration.
  */
 
-function readConfig(): Promise<BlurUpConfig | null> {
+async function readConfig(): Promise<BlurUpConfig | null> {
 
 	// Checks if the package file contains a configuration.
 	const pkgConfigPromise = new Promise<BlurUpConfig | null>((resolve, reject) => {
@@ -230,11 +227,8 @@ function readConfig(): Promise<BlurUpConfig | null> {
 
 	});
 
-	return pkgConfigPromise.then((config) => {
-
-		return config !== null ? Promise.resolve(config) : configFilePromise;
-
-	});
+	const config = await pkgConfigPromise;
+	return await (config !== null ? Promise.resolve(config) : configFilePromise);
 
 }
 
