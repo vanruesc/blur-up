@@ -30,6 +30,6 @@ jobs:
       - name: Install dependencies and test
         run: pnpm install-test --frozen-lockfile
       - name: Publish
-        run: pnpm publish --ignore-scripts
+        run: pnpm publish --ignore-scripts --no-git-checks
         env:
           NPM_CONFIG_PROVENANCE: true
