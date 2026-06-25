@@ -1,19 +1,26 @@
 {
-	"include": ["./*.js", "./src", "./test"],
+	"include": [
+		"./src",
+		"./test"
+	],
 	"compilerOptions": {
+		// File Layout
 		"rootDir": ".",
-		"baseUrl": ".",
 		"outDir": "./dist",
-		"moduleResolution": "NodeNext",
-		"module": "NodeNext",
-		"target": "ESNext",
-		"strict": true,
-		"allowJs": true,
+		// Environment Settings
+		"moduleResolution": "bundler",
+		"module": "esnext",
+		"target": "es2025",
+		"types": ["node"],
+		// Style Options
+		"noImplicitReturns": true,
+		"noImplicitOverride": true,
+		// Other
+		"allowSyntheticDefaultImports": true,
+		"noUncheckedSideEffectImports": true,
+		"resolveJsonModule": true,
 		"sourceMap": false,
 		"skipLibCheck": true,
-		"importHelpers": true,
-		"resolveJsonModule": true,
-		"noImplicitOverride": true,
-		"allowSyntheticDefaultImports": true
+		"checkJs": true
 	}
 }
