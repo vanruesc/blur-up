@@ -1,0 +1,4 @@
+save: false
+allowBuilds:
+  'esbuild': true
+  'sharp': true
