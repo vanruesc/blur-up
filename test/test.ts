@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { access, readFile, rm, constants } from "fs/promises";
 import { blurUp } from "svg-blur-up";
 
-describe("EventTarget", () => {
+describe("BlurUp", () => {
 
 	before(async() => rm("test/generated", {
 		recursive: true,
