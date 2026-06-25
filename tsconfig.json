@@ -7,6 +7,9 @@
 		// File Layout
 		"rootDir": ".",
 		"outDir": "./dist",
+		"paths": {
+			"svg-blur-up": ["./src/index.js"]
+		},
 		// Environment Settings
 		"moduleResolution": "bundler",
 		"module": "esnext",
