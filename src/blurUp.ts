@@ -126,7 +126,7 @@ async function saveFile(input: string, output: string, data: Buffer): Promise<vo
  * @return A promise that resolves when the image has been generated.
  */
 
-export async function blurUp(input: string, output: string, options: BlurUpOptions): Promise<void> {
+export async function blurUp(input: string, output: string, options?: BlurUpOptions): Promise<void> {
 
 	// Define default values.
 	options = Object.assign({
