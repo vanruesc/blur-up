@@ -46,17 +46,13 @@
 		"node": ">= 18"
 	},
 	"scripts": {
-		"build": "run-p build:js:min build:dts",
-		"build:js": "node esbuild",
-		"build:js:min": "node esbuild -m",
-		"build:dts": "tsc -p tsconfig.d.json",
+		"build": "node esbuild",
 		"clean": "del-cli dist test/generated",
-		"lint": "run-p lint:*",
-		"lint:js": "eslint --fix src test",
-		"lint:tsc": "tsc --noEmit",
-		"prepublishOnly": "npm test",
-		"pretest": "run-s clean lint build",
-		"test": "node --import tsx --test"
+		"dts": "tsc -p tsconfig.d.json",
+		"lint": "eslint --fix src test",
+		"pretest": "run-s clean dts lint build",
+		"test": "node --import tsx --test test/test.ts",
+		"prepublishOnly": "run-s test"
 	},
 	"dependencies": {
 		"glob": "13.x.x",
