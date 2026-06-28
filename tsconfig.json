@@ -7,9 +7,6 @@
 		// File Layout
 		"rootDir": ".",
 		"outDir": "./dist",
-		"paths": {
-			"svg-blur-up": ["./src/index.js"]
-		},
 		// Environment Settings
 		"moduleResolution": "bundler",
 		"module": "esnext",
@@ -23,7 +20,6 @@
 		"noUncheckedSideEffectImports": true,
 		"resolveJsonModule": true,
 		"sourceMap": false,
-		"skipLibCheck": true,
-		"checkJs": true
+		"skipLibCheck": true
 	}
 }
